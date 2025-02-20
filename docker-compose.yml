@@ -1,0 +1,21 @@
+services:
+  # my pc couldn't handle oracle database since it's weak i used mariadb as my main db
+  db:
+    image: mariadb:11
+    container_name: db-tickets
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MARIADB_DATABASE: tickets
+    volumes:
+      - data:/var/lib/mysql
+    ports:
+      - "3037:3306"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  data:
